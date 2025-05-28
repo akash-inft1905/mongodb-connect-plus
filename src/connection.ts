@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { ConnectionConfig, ConnectionResult, MultiConnectionConfig, MultiConnectionResult, RetryOptions } from './types';
+import { ConnectionConfig, ConnectionResult, MultiConnectionConfig, MultiConnectionResult, RetryOptions, LoggingOptions } from './types';
 import { Logger } from './logger';
 
 const defaultRetryOptions: RetryOptions = {
@@ -8,12 +8,18 @@ const defaultRetryOptions: RetryOptions = {
   backoffFactor: 1.5
 };
 
+const defaultLoggingOptions: LoggingOptions = {
+  enabled: true,
+  level: 'info',
+  format: 'simple'
+};
+
 export class MongoDBConnection {
   private logger: Logger;
   private connections: Map<string, mongoose.Connection> = new Map();
 
-  constructor() {
-    this.logger = new Logger();
+  constructor(loggingOptions?: Partial<LoggingOptions>) {
+    this.logger = new Logger(loggingOptions);
   }
 
   private validatePoolOptions(options?: mongoose.ConnectOptions): mongoose.ConnectOptions {
@@ -45,6 +51,10 @@ export class MongoDBConnection {
     try {
       const validatedOptions = this.validatePoolOptions(options);
       const connection = await mongoose.createConnection(uri, validatedOptions);
+      
+      // Verify the connection is actually working
+      await connection.asPromise();
+      
       this.logger.info(`Successfully connected to MongoDB at ${uri}`);
       return { success: true, connection };
     } catch (error) {
@@ -61,6 +71,13 @@ export class MongoDBConnection {
 
   async connect(config: ConnectionConfig): Promise<ConnectionResult> {
     const retryOptions = { ...defaultRetryOptions, ...config.retryOptions };
+    const loggingOptions = { ...defaultLoggingOptions, ...config.loggingOptions };
+    
+    // Update logger with new options if provided
+    if (config.loggingOptions) {
+      this.logger = new Logger(loggingOptions);
+    }
+
     const options = {
       ...this.validatePoolOptions(config.options),
       maxPoolSize: config.options?.maxPoolSize || 10,

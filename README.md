@@ -13,42 +13,6 @@ A modern, robust MongoDB connection utility with automatic retry, connection poo
 
 </div>
 
-## ✨ Features
-
-- 🔄 **Automatic Retry Logic**
-
-  - Configurable retry attempts
-  - Exponential backoff
-  - Custom retry intervals
-  - Smart error handling
-
-- 🔌 **Connection Pooling**
-
-  - Optimized pool sizes
-  - Automatic pool management
-  - Pool statistics
-  - Connection lifecycle events
-
-- 📝 **Built-in Logging**
-
-  - Winston-based logging
-  - Multiple log levels
-  - JSON and simple formats
-  - Customizable logging options
-
-- 🔑 **Multiple MongoDB Support**
-
-  - Connect to multiple databases
-  - Named connections
-  - Individual connection management
-  - Connection status tracking
-
-- 🎯 **TypeScript Support**
-  - Full type definitions
-  - Interface exports
-  - Type safety
-  - Better IDE support
-
 ## 📦 Installation
 
 ```bash
@@ -80,22 +44,6 @@ if (result.success) {
 
 ## 📚 Documentation
 
-### Connection Flow
-
-```mermaid
-graph TD
-    A[Start] --> B[Create Connection Config]
-    B --> C{Validate Config}
-    C -->|Invalid| D[Return Error]
-    C -->|Valid| E[Attempt Connection]
-    E --> F{Connection Success?}
-    F -->|No| G{Retry Available?}
-    G -->|Yes| H[Wait & Retry]
-    H --> E
-    G -->|No| I[Return Error]
-    F -->|Yes| J[Return Connection]
-```
-
 ### Configuration Options
 
 #### ConnectionConfig
@@ -105,7 +53,6 @@ interface ConnectionConfig {
   uri: string; // MongoDB connection URI
   options?: ConnectOptions; // Mongoose connection options
   retryOptions?: RetryOptions; // Retry configuration
-  loggingOptions?: LoggingOptions; // Logging configuration
 }
 ```
 
@@ -119,15 +66,7 @@ interface RetryOptions {
 }
 ```
 
-#### LoggingOptions
-
-```typescript
-interface LoggingOptions {
-  enabled: boolean; // Enable/disable logging
-  level: "error" | "warn" | "info" | "debug"; // Log level
-  format: "json" | "simple"; // Log format
-}
-```
+````
 
 ### Advanced Usage
 
@@ -146,7 +85,7 @@ const results = await connectMultiple({
     options: { maxPoolSize: 3 },
   },
 });
-```
+````
 
 #### Custom Logger
 
@@ -324,6 +263,42 @@ export class MongoDBModule {}
 - **Logging**: Use appropriate log levels in production
 - **Error Handling**: Implement proper error handling and monitoring
 
+## ✨ Features
+
+- 🔄 **Automatic Retry Logic**
+
+  - Configurable retry attempts
+  - Exponential backoff
+  - Custom retry intervals
+  - Smart error handling
+
+- 🔌 **Connection Pooling**
+
+  - Optimized pool sizes
+  - Automatic pool management
+  - Pool statistics
+  - Connection lifecycle events
+
+- 📝 **Built-in Logging**
+
+  - Winston-based logging
+  - Multiple log levels
+  - JSON and simple formats
+  - Customizable logging options
+
+- 🔑 **Multiple MongoDB Support**
+
+  - Connect to multiple databases
+  - Named connections
+  - Individual connection management
+  - Connection status tracking
+
+- 🎯 **TypeScript Support**
+  - Full type definitions
+  - Interface exports
+  - Type safety
+  - Better IDE support
+
 ## 🔍 Troubleshooting
 
 Common issues and solutions:
@@ -358,14 +333,10 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - [Mongoose](https://mongoosejs.com/)
 - [MongoDB](https://www.mongodb.com/)
 - [Winston](https://github.com/winstonjs/winston)
 
 ---
-
-<div align="center">
-Made with ❤️ by [Your Name]
-</div>

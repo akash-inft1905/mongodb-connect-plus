@@ -1,6 +1,6 @@
 {
   "name": "mongodb-connect-plus",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "A modern MongoDB connection utility with automatic retry, connection pooling, and TypeScript support",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
